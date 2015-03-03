@@ -2,8 +2,8 @@
   ssitegen - generate a static site
 
 # SYNOPSIS
-  ssitegen [ file ... ]
+  ssitegen [-h] [-i]
 
 # DESCRIPTION
-  Ssitegen generates html files used to serve a website from corresponding files written in 
-  markdown. 
+  ssitegen generates html files used to serve a website from corresponding files written in 
+  markdown.
