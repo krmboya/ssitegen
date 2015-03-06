@@ -5,21 +5,21 @@ ssitegen - generate a static site
 ssitegen [-h] [-i DIRNAME ]
 
 # DESCRIPTION
-ssitegen generates html files that can be used to serve a website from files written in 
-markdown. It uses the directory structure created initialization to generate an output
-directory containing the necessary html files and other static assets needed to render the
-site on a web browser. The website can then be served from this directory, or it can be 
-uploaded to some other web host, depending on the preferred hosting method.
-
+ssitegen generates a collection of html files that can be used to serve a website from
+input files written using the markdown syntax. It uses an opinionated directory structure
+for both the input files and the output html files, plus other static assets like
+images and stylesheets. A website can then be served from the output directory depending
+on the preferred method of hosting, for example by pointing a webserver to its location or 
+uploading it to some other web hosting service.
 
 ## Usage
 
-### Initialization
+### Initializing the source directory
 
-Running the command `ssitegen -i mysite` will create a directory named `mysite` if it doesn't
-already exist and add the necessary files and directories within it.
+Running the command `ssitegen -i mysite` will create a directory named `mysite`, if it
+doesn't already exist and add the necessary files and directories within it.
 
-Inside `mysite`, are the following files and directories:
+Inside `mysite`, are the following:
 
 - settings.py
 - static
@@ -30,7 +30,7 @@ Inside `mysite`, are the following files and directories:
 
 Running the command `ssitegen` while inside the directory created above will create a new
 directory named `output`. This directory contains all the necessary files needed to 
-render the website. It contains the following files and directories:
+serve the website, i.e.
 
 - index.html
 - static
