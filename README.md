@@ -21,10 +21,10 @@ doesn't already exist and add the necessary files and directories within it.
 
 Inside `mysite`, are the following:
 
-- settings.py
-- static
-- templates
-- content
+- settings.py - site specific configuration
+- static - static assets like images, JavaScript, css etc
+- templates - contains templates for common parts of the html pages
+- content - contains the actual blog/page entries as markdown files
 
 ### Generating a site
 
@@ -32,7 +32,7 @@ Running the command `ssitegen` while inside the directory created above will cre
 directory named `output`. This directory contains all the necessary files needed to 
 serve the website, i.e.
 
-- index.html
-- static
-- entries
-- pages
+- index.html - the site's landing page
+- static - contains the site's static assets
+- entries - contains the blog entry html files
+- pages - contains html files for the other parts of the site
