@@ -8,8 +8,10 @@ parser.add_argument("-i", "--initialize", action="store", default=None, dest="di
 
 args = parser.parse_args()
 
+INPUT_DIRS = ('static', 'templates', 'content/entries', 'content/pages')
+
 def ensure_dir_exists(dirname, mode=0o755):
     """Creates a directory with the given name if doesn't already exist"""
 
     if not os.path.exists(dirname):
-        os.mkdir(dirname, mode)
+        os.makedirs(dirname, mode)
