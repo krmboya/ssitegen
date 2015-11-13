@@ -21,10 +21,10 @@ doesn't already exist and add the necessary files and directories within it.
 
 Inside `mysite`, are the following:
 
-- settings.py - site specific configuration
-- static - static assets like images, JavaScript, css etc
-- templates - contains templates for common parts of the html pages
-- content - contains the actual blog/page entries as markdown files
+- settings.py - site specific configuration file
+- static - directory containing static assets like images, JavaScript, css etc
+- templates - directory containing templates for common parts of the html pages
+- content - directory containing the actual blog/page entries as markdown files
 
 ### Generating a site
 
@@ -36,3 +36,7 @@ serve the website, i.e.
 - static - contains the site's static assets
 - entries - contains the blog entry html files
 - pages - contains html files for the other parts of the site
+
+## Development
+
+Trello board: https://trello.com/b/qBxOPk1y/ssitegen
