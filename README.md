@@ -21,7 +21,7 @@ doesn't already exist and add the necessary files and directories within it.
 
 Inside `mysite`, are the following:
 
-- settings.py - site specific configuration file
+- settings - site specific configuration file
 - static - directory containing static assets like images, JavaScript, css etc
 - templates - directory containing templates for common parts of the html pages
 - content - directory containing the actual blog/page entries as markdown files
