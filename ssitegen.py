@@ -5,7 +5,7 @@ import sys
 import shutil
 
 EXEC_ROOT = os.path.dirname(__file__)
-
+DIR_TEMPLATE_PATH = "data/source_dir"
 SOURCE_SUBDIRS = ('static', 'templates', 'content/entries', 'content/pages')
 
 parser = argparse.ArgumentParser(add_help=True, description="A simple static site generator")
@@ -13,33 +13,18 @@ parser = argparse.ArgumentParser(add_help=True, description="A simple static sit
 parser.add_argument("-i", "--initialize", action="store", default=None, dest="dirname",
                     help="Initialize the directory structure inside DIRNAME")
 
-def ensure_dir_exists(dirname, mode=0o755):
-    """Creates a directory with the given name if doesn't already exist"""
-
-    if not os.path.exists(dirname):
-        os.makedirs(dirname, mode)
-
 
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.dirname:
-        source_dir = args.dirname
-        if os.path.exists(source_dir):
+        working_dir = args.dirname
+        if os.path.exists(working_dir):
             # already exists, print error and exit
-            err_msg = "Directory '{0}' already exists\n".format(source_dir)
+            err_msg = "Directory '{0}' already exists\n".format(working_dir)
             sys.stderr.write(err_msg)
-        else:
-            # create directory and subdirectories
-            ensure_dir_exists(source_dir)
-            for subdir in SOURCE_SUBDIRS:
-                path = os.path.join(source_dir, subdir)
-                ensure_dir_exists(path)
-
-            # create settings from template
-            settings_template = os.path.join(EXEC_ROOT, "data", "settings_template")            
-            settings_path = os.path.join(source_dir, "settings")
-
-            shutil.copyfile(settings_template, settings_path)
-            
+            sys.exit(1)
+        
+        dir_template_loc = os.path.join(EXEC_ROOT, DIR_TEMPLATE_PATH)
+        shutil.copytree(dir_template_loc, working_dir)
     else:
         print "generating output"
