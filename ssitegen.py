@@ -6,7 +6,7 @@ import shutil
 
 EXEC_ROOT = os.path.dirname(__file__)
 DIR_TEMPLATE_PATH = "data/source_dir"
-SOURCE_SUBDIRS = ('static', 'templates', 'content/entries', 'content/pages')
+OUTPUT_DIRNAME = "output"
 
 parser = argparse.ArgumentParser(add_help=True, description="A simple static site generator")
 
@@ -14,6 +14,13 @@ parser.add_argument("-i", "--initialize", action="store", default=None, dest="di
                     help="Initialize the directory structure inside DIRNAME")
 
 
+def ensure_dir_exists(dirname, mode=0o755):
+    """Creates a directory with the given name if doesn't already exist"""
+
+    if not os.path.exists(dirname):
+        os.mkdir(dirname, mode)
+
+        
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.dirname:
@@ -27,4 +34,5 @@ if __name__ == "__main__":
         dir_template_loc = os.path.join(EXEC_ROOT, DIR_TEMPLATE_PATH)
         shutil.copytree(dir_template_loc, working_dir)
     else:
-        print "generating output"
+        # generate output
+        ensure_dir_exists(OUTPUT_DIRNAME)
