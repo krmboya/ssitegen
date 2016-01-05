@@ -34,5 +34,9 @@ if __name__ == "__main__":
         dir_template_loc = os.path.join(EXEC_ROOT, DIR_TEMPLATE_PATH)
         shutil.copytree(dir_template_loc, working_dir)
     else:
-        # generate output
+        # generate output directory
         ensure_dir_exists(OUTPUT_DIRNAME)
+
+        # copy over static assets
+        shutil.copytree('static', OUTPUT_DIRNAME + "/static")
+        
