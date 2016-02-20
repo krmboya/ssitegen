@@ -3,15 +3,18 @@ import os
 import argparse
 import sys
 import shutil
+import json
 
 EXEC_ROOT = os.path.dirname(__file__)
-DIR_TEMPLATE_PATH = "data/source_dir"
-OUTPUT_DIRNAME = "output"
+DIR_TEMPLATE_PATH = os.path.join(EXEC_ROOT, "data/source_dir")
 
-parser = argparse.ArgumentParser(add_help=True, description="A simple static site generator")
+parser = argparse.ArgumentParser(add_help=True, 
+                                 description="A simple static site generator")
 
 parser.add_argument("-i", "--initialize", action="store", default=None, dest="dirname",
                     help="Initialize the directory structure inside DIRNAME")
+
+parser.add_argument('--version', action='version', version='%(prog)s 0.1')
 
 
 def ensure_dir_exists(dirname, mode=0o755):
@@ -34,9 +37,17 @@ if __name__ == "__main__":
         dir_template_loc = os.path.join(EXEC_ROOT, DIR_TEMPLATE_PATH)
         shutil.copytree(dir_template_loc, working_dir)
     else:
+        # read in settings
+        with open("settings") as f:
+            settings = json.loads(f.read())
+            
         # generate output directory
-        ensure_dir_exists(OUTPUT_DIRNAME)
+        output_dir = settings["output_dirname"]
+        ensure_dir_exists(output_dir)
 
         # copy over static assets
-        shutil.copytree('static', OUTPUT_DIRNAME + "/static")
+        shutil.copytree('static', output_dir + "/static")
+        
+        # TODO
+        # - generate entry pages
         
