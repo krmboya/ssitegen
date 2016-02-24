@@ -8,6 +8,7 @@ import shutil
 import json
 
 import markdown
+import jinja2
 
 EXEC_ROOT = os.path.dirname(__file__)
 DIR_TEMPLATE_PATH = os.path.join(EXEC_ROOT, "data/source_dir")
@@ -22,21 +23,34 @@ parser.add_argument("-i", "--initialize", action="store", default=None,
 parser.add_argument('--version', action='version', version='%(prog)s 0.1')
 
 
-def convert_files_to_html(source_dir, dest_dir):
-    """Converts markdown files in source dir to html files in dest dir"""
+def convert_files_to_html(source_dir, dest_dir, templates_dir, template_name):
+    """Converts markdown files in source dir to html files in dest dir
+
+    Uses template filename to as a jinja2 template"""
 
     files = os.listdir(source_dir)
     markdown_files = [fname for fname in files 
                       if fname.rsplit(".", 1)[1] == "md"]
     
     converter = markdown.Markdown()
+    jinja_env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(templates_dir))
+    template = jinja_env.get_template(template_name)
 
     for fname in markdown_files:
         source_file = os.path.join(source_dir, fname)
         dest_file = os.path.join(dest_dir, fname.rsplit(".", 1)[0] + ".html")
-        converter.convertFile(source_file, dest_file)
-
         
+        with open(source_file, "r") as f:
+            md_content = f.read()
+        
+        html_content = converter.convert(md_content)
+        
+        with open(dest_file, "w") as f:
+            f.write(template.render(entry=html_content, title="foo"))
+            
+        converter.reset()
+
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.dirname:
@@ -70,4 +84,5 @@ if __name__ == "__main__":
         shutil.copytree('static', output_dir + "/static")
         
         # Generate entries
-        convert_files_to_html("content/entries", output_dir)
+        convert_files_to_html("content/entries", output_dir, 'templates',
+                              "entry.html")
