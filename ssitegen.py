@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import io
 import os
 import argparse
 import sys
 import shutil
 import json
 
+# third party libs
 import markdown
 import jinja2
 
@@ -23,33 +25,59 @@ parser.add_argument("-i", "--initialize", action="store", default=None,
 parser.add_argument('--version', action='version', version='%(prog)s 0.1')
 
 
-def convert_files_to_html(source_dir, dest_dir, templates_dir, template_name):
+def render_template(template_name, context, environment):
+    """Renders a jinja2 template"""
+
+    template = environment.get_template(template_name)
+    return template.render(context)
+
+
+def process_file(src, dest, template_name, jinja_env, md_converter):
+    """Generates html file named `dest' from source file
+
+    Returns metadata extracted during processing"""
+
+    with io.open(src, "rt") as f:
+        md_content = f.read()
+            
+    html_content = md_converter.convert(md_content)
+    metadata = md_converter.Meta
+    metadata["entry"] = html_content
+
+    html_content = render_template(template_name, metadata, jinja_env)
+        
+    with io.open(dest, "wt") as f:
+        f.write(html_content)
+            
+    md_converter.reset()
+    return metadata
+
+
+def convert_files_to_html(source_dir, dest_dir, template_name, templates_dir):
     """Converts markdown files in source dir to html files in dest dir
 
-    Uses template filename to as a jinja2 template"""
+    Returns list of metadata extracted from each file"""
+
+    converter = markdown.Markdown(extensions=['markdown.extensions.meta'])
+    jinja_env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(templates_dir))
 
     files = os.listdir(source_dir)
     markdown_files = [fname for fname in files 
                       if fname.rsplit(".", 1)[1] == "md"]
-    
-    converter = markdown.Markdown()
-    jinja_env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(templates_dir))
-    template = jinja_env.get_template(template_name)
 
+    metadata_list = []
+    
     for fname in markdown_files:
         source_file = os.path.join(source_dir, fname)
         dest_file = os.path.join(dest_dir, fname.rsplit(".", 1)[0] + ".html")
+
+        metadata = process_file(source_file, dest_file,
+                                template_name, jinja_env, converter)
+        metadata_list.append(metadata)
         
-        with open(source_file, "r") as f:
-            md_content = f.read()
+    return metadata_list
         
-        html_content = converter.convert(md_content)
-        
-        with open(dest_file, "w") as f:
-            f.write(template.render(entry=html_content, title="foo"))
-            
-        converter.reset()
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -84,5 +112,5 @@ if __name__ == "__main__":
         shutil.copytree('static', output_dir + "/static")
         
         # Generate entries
-        convert_files_to_html("content/entries", output_dir, 'templates',
-                              "entry.html")
+        convert_files_to_html("content/entries", output_dir, 
+                              "entry.html",'templates')
