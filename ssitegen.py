@@ -78,10 +78,14 @@ def convert_files_to_html(source_dir, dest_dir, template_name, templates_dir):
         metadata_list.append(metadata)
         
     return metadata_list
-        
 
-if __name__ == "__main__":
+
+def main():
+    """Starting point of the script"""
+
+    # parse provided args
     args = parser.parse_args()
+
     if args.dirname:
         # Initializing
 
@@ -96,11 +100,13 @@ if __name__ == "__main__":
         # Initialize directory contents
         dir_template_loc = os.path.join(EXEC_ROOT, DIR_TEMPLATE_PATH)
         shutil.copytree(dir_template_loc, working_dir)
+
+        
     else:
         # Generating site
 
-        # read in settings
-        with open("settings") as f:
+        # Read in settings
+        with io.open("settings", 'rt') as f:
             settings = json.loads(f.read())
             
         # generate fresh output directory
@@ -123,7 +129,6 @@ if __name__ == "__main__":
                               template_name="page.html",
                               templates_dir='templates')
 
-
         # Generate landing page
         jinja_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader('templates'))
@@ -132,3 +137,7 @@ if __name__ == "__main__":
         dest = os.path.join(output_dir, "index.html")
         with io.open(dest, "wt") as f:
             f.write(html)
+    
+
+if __name__ == "__main__":
+    main()
