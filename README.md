@@ -24,7 +24,7 @@ Inside `mysite`, are the following:
 - settings - site specific configuration file
 - static - directory containing static assets like images, JavaScript, css etc
 - templates - directory containing templates for common parts of the html pages
-- content - directory containing the actual blog/page entries as markdown files
+- content - directory containing the actual blog entry/page as markdown files
 
 ### Generating a site
 
@@ -34,8 +34,7 @@ serve the website, i.e.
 
 - index.html - the site's landing page
 - static - contains the site's static assets
-- entries - contains the blog entry html files
-- pages - contains html files for the other parts of the site
+- a html file for each blog entry/page
 
 ## Development
 
