@@ -42,7 +42,8 @@ def process_file(src, dest, template_name, jinja_env, md_converter):
             
     html_content = md_converter.convert(md_content)
     metadata = md_converter.Meta
-    metadata["entry"] = html_content
+    metadata["page_content"] = html_content
+    metadata["filename"] = os.path.basename(dest)
 
     html_content = render_template(template_name, metadata, jinja_env)
         
@@ -112,5 +113,22 @@ if __name__ == "__main__":
         shutil.copytree('static', output_dir + "/static")
         
         # Generate entries
-        convert_files_to_html("content/entries", output_dir, 
-                              "entry.html",'templates')
+        entry_metadata = convert_files_to_html("content/entries", 
+                                               output_dir, 
+                                               template_name="entry.html", 
+                                               templates_dir='templates')
+
+        # Generate site pages
+        convert_files_to_html("content/pages", output_dir,
+                              template_name="page.html",
+                              templates_dir='templates')
+
+
+        # Generate landing page
+        jinja_env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader('templates'))
+        context = {"entries": entry_metadata}
+        html = render_template("index.html", context, jinja_env)
+        dest = os.path.join(output_dir, "index.html")
+        with io.open(dest, "wt") as f:
+            f.write(html)

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for entry in entries %}
+<p> <a href="{{ entry.filename }}"> {{ entry.title.0 }} </a> </p>
+{% endfor %}
+{% endblock %}
