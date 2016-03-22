@@ -109,7 +109,7 @@ def main():
         with io.open("settings", 'rt') as f:
             settings = json.loads(f.read())
             
-        # generate fresh output directory
+        # create a new output directory
         output_dir = settings["output_dirname"]
         if os.path.exists(output_dir):
             shutil.rmtree(output_dir)

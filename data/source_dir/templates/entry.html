@@ -1,5 +1,21 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1> {{ title }} </h1>
-{{ entry }}
+
+<article class="content single-article"> 
+  
+  <header class="">
+    <time datetime="2009-10-22" pubdate>October 22, 2009</time>
+    <h1 class="article-header">
+      <a href="article.html" rel="bookmark" title="link to this post">Travel day</a>
+    </h1>
+  </header>
+
+  {{ page_content }}
+  
+  <p class="article-tags"> Posted under: unix, lisp, mathematics </p>
+
+</article>
+
 {% endblock %}
+

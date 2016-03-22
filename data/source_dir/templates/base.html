@@ -1,7 +1,50 @@
-<!doctype html>
-<head>
-</head>
-<body>
-  {% block content %}
-  {% endblock %}
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8"/>
+    <title>My Weblog</title>
+    <link rel="stylesheet" href="static/reset.css"/>
+    <link rel="stylesheet" href="static/style.css"/>
+    <link rel="author"/>
+    <link rel="shortcut icon"/>
+    <link rel="prefetch"/>
+    <link rel="tag"/>
+
+    <!--[if lt IE 9]>
+	<script src="static/html5shiv.js"></script>
+	<![endif]-->
+  </head>
+
+  <body>
+
+    <header id="page-header">
+
+      <div class="content">
+	
+	<img src="http://gravatar.com/avatar/174239a782783c7b3af0e9845772a130"
+	     id="blog-header-image"/>
+	
+	<hgroup class="">
+	  <h1 id="blog-title">My Weblog</h1>
+	  <h2 id="blog-description"> Musings of an internet boy </h2>
+	</hgroup>
+
+	<nav class="">
+	  <ul id="blog-navigation-list">
+            <li><a href="blog.html" title="list of articles">blog</a> | </li>
+            <li><a href="about.html" title="about the author">about</a></li>
+	  </ul>
+	</nav>
+	
+      </div>
+
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+
+  </body>
+  
+</html>

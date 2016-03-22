@@ -1,0 +1,14 @@
+body { line-height: 1.8; }
+.content { margin-left: auto; margin-right: auto; max-width: 40em; 
+	   padding-right: 1em; padding-left: 1em; }
+#page-header { background-color: rgb(250, 250, 250); padding-top: 5%; 
+	       padding-bottom: 5%;}
+#blog-header-image { float: right; border-radius: 50px;}
+a { text-decoration: none; }
+.single-article { margin-top: 2em; margin-bottom: 2em;}
+#blog-navigation-list li { display: inline; font-size: smaller; }
+#blog-description { color: rgba(0, 0, 0, 0.6); }
+#blog-title { font-size: large; }
+.article-tags { font-size: small; text-align: right;}
+.article-header { font-size: large; }
+.single-article p { margin-bottom: 1em; }
