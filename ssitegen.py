@@ -7,6 +7,7 @@ import argparse
 import sys
 import shutil
 import json
+import datetime
 
 # third party libs
 import markdown
@@ -33,9 +34,9 @@ def render_template(template_name, context, environment):
 
 
 def process_file(src, dest, template_name, jinja_env, md_converter):
-    """Generates html file named `dest' from source file
+    """Generates html file named `dest' from `src'
 
-    Returns metadata extracted during processing"""
+    Returns metadata extracted from `src'"""
 
     with io.open(src, "rt") as f:
         md_content = f.read()
@@ -44,6 +45,16 @@ def process_file(src, dest, template_name, jinja_env, md_converter):
     metadata = md_converter.Meta
     metadata["page_content"] = html_content
     metadata["filename"] = os.path.basename(dest)
+    
+    # convert date string to date object
+    try:
+        date_components = metadata["pubdate"][0].replace(' ', '').split("-")
+    except KeyError:
+        # no pubdate
+        pass
+    else:
+        date_components = [int(v) for v in date_components]
+        metadata["pubdate"] = datetime.date(*date_components)
 
     html_content = render_template(template_name, metadata, jinja_env)
         
@@ -83,13 +94,11 @@ def convert_files_to_html(source_dir, dest_dir, template_name, templates_dir):
 def main():
     """Starting point of the script"""
 
-    # parse provided args
     args = parser.parse_args()
 
     if args.dirname:
-        # Initializing
+        # Initialize a new working directory
 
-        # Create directory
         working_dir = args.dirname
         if os.path.exists(working_dir):
             # already exists, print error and exit
@@ -103,7 +112,7 @@ def main():
 
         
     else:
-        # Generating site
+        # Generate the site from source
 
         # Read in settings
         with io.open("settings", 'rt') as f:
@@ -132,7 +141,12 @@ def main():
         # Generate landing page
         jinja_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader('templates'))
-        context = {"entries": entry_metadata}
+
+        # sort entries in descending order of date
+        entry_metadata.sort(key=lambda entry: entry["pubdate"], reverse=True)
+        
+        context = {"entries": entry_metadata } 
+        
         html = render_template("index.html", context, jinja_env)
         dest = os.path.join(output_dir, "index.html")
         with io.open(dest, "wt") as f:

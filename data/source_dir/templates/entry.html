@@ -4,16 +4,23 @@
 
 <article class="content single-article"> 
   
-  <header class="">
-    <time datetime="2009-10-22" pubdate>October 22, 2009</time>
+  <header>
+    <time datetime="{{ pubdate.strftime("%Y-%m-%d") }}" pubdate>
+      {{ pubdate.strftime("%b %d, %Y") }}
+    </time>
     <h1 class="article-header">
-      <a href="article.html" rel="bookmark" title="link to this post">Travel day</a>
+      <a href="{{ filename }}" rel="bookmark" title="link to this post">
+	{{ title.0 }}
+      </a>
     </h1>
   </header>
 
   {{ page_content }}
   
-  <p class="article-tags"> Posted under: unix, lisp, mathematics </p>
+  <p class="article-tags"> 
+    Posted under: 
+    {% for t in tags %}{{ t }}{% if not loop.last %}, {% endif %}{% endfor %}
+  </p>
 
 </article>
 
