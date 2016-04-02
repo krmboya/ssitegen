@@ -10,5 +10,7 @@ a { text-decoration: none; }
 #blog-description { color: rgba(0, 0, 0, 0.6); }
 #blog-title { font-size: large; }
 .article-tags { font-size: small; text-align: right;}
-.article-header { font-size: large; }
+.article-heading { font-size: large; }
 .single-article p { margin-bottom: 1em; }
+.tag { font-weight: bold; }
+.full-article-header { margin-bottom: 1em; }

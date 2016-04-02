@@ -5,20 +5,24 @@
 {% for entry in entries %}
 <article class="content single-article"> 
   
-  <header class="">
-    <time datetime="2009-10-22" pubdate>October 22, 2009</time>
-    <h1 class="article-header">
+  <header>
+    <time datetime="{{ entry.pubdate.strftime("%Y-%m-%d") }}" pubdate>
+      {{ entry.pubdate.strftime("%b %d, %Y") }}
+    </time>
+    <h1 class="article-heading">
       <a href="{{ entry.filename }}" rel="bookmark" title="link to this post">
 	{{ entry.title.0 }}
       </a>
     </h1>
   </header>
 
-  <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec 
-    hendrerit felis accumsan turpis pretium tempor. Duis eu turpis nunc, ut 
-    mauris posuere nisl, non pellentesque est leo a quam... </p>
+  <p class="">{{ entry.description.0 }}</p>
   
-  <p class="article-tags"> Posted under: unix, lisp, mathematics </p>
+  <p class="article-tags">
+    Posted under <br />
+    {% for t in entry.tags %}<span class="tag">{{ t }}</span>{% if not loop.last %}, 
+    {% endif %}{% endfor %}
+  </p>
 
 </article>
 

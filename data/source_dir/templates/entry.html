@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
+{% block title %} {{ title.0 }} {% endblock %}
+
 {% block content %}
 
 <article class="content single-article"> 
   
-  <header>
+  <header class="full-article-header">
     <time datetime="{{ pubdate.strftime("%Y-%m-%d") }}" pubdate>
       {{ pubdate.strftime("%b %d, %Y") }}
     </time>
-    <h1 class="article-header">
+    <h1 class="article-heading">
       <a href="{{ filename }}" rel="bookmark" title="link to this post">
 	{{ title.0 }}
       </a>
@@ -18,8 +20,9 @@
   {{ page_content }}
   
   <p class="article-tags"> 
-    Posted under: 
-    {% for t in tags %}{{ t }}{% if not loop.last %}, {% endif %}{% endfor %}
+    Posted under<br />
+    {% for t in tags %}<span class="tag">{{ t }}</span>{% if not loop.last %}, 
+    {% endif %}{% endfor %}
   </p>
 
 </article>

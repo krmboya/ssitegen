@@ -1,3 +1,10 @@
 {
-  "output_dirname": "output"
+    "blog_title": "My Weblog",
+    "blog_description": "My Daily Thoughts",
+    "blog_image": "http://gravatar.com/avatar/foo",
+    "entries_directory": "content/entries",
+    "pages_directory": "content/pages",
+    "templates_directory": "templates",
+    "static_directory": "static",
+    "output_directory": "output"
 }

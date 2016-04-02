@@ -3,7 +3,7 @@
   
   <head>
     <meta charset="UTF-8"/>
-    <title>My Weblog</title>
+    <title> {% block title %} {{ blog_title }} {% endblock %} </title>
     <link rel="stylesheet" href="static/reset.css"/>
     <link rel="stylesheet" href="static/style.css"/>
     <link rel="author"/>
@@ -22,18 +22,18 @@
 
       <div class="content">
 	
-	<img src="http://gravatar.com/avatar/174239a782783c7b3af0e9845772a130"
+	<img src="{{ blog_image }}"
 	     id="blog-header-image"/>
 	
 	<hgroup class="">
-	  <h1 id="blog-title">My Weblog</h1>
-	  <h2 id="blog-description"> Musings of an internet boy </h2>
+	  <h1 id="blog-title">{{ blog_title }}</h1>
+	  <h2 id="blog-description"> {{ blog_description }}</h2>
 	</hgroup>
 
 	<nav class="">
 	  <ul id="blog-navigation-list">
-            <li><a href="blog.html" title="list of articles">blog</a> | </li>
-            <li><a href="about.html" title="about the author">about</a></li>
+            <li><a href="index.html" title="list of articles">blog</a> | </li>
+            <li><a href="about.html" title="about the author">about</a>  </li>
 	  </ul>
 	</nav>
 	

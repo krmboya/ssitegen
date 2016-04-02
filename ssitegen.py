@@ -33,7 +33,7 @@ def render_template(template_name, context, environment):
     return template.render(context)
 
 
-def process_file(src, dest, template_name, jinja_env, md_converter):
+def process_file(src, dest, template_name, templates_env, md_converter):
     """Generates html file named `dest' from `src'
 
     Returns metadata extracted from `src'"""
@@ -47,16 +47,13 @@ def process_file(src, dest, template_name, jinja_env, md_converter):
     metadata["filename"] = os.path.basename(dest)
     
     # convert date string to date object
-    try:
-        date_components = metadata["pubdate"][0].replace(' ', '').split("-")
-    except KeyError:
-        # no pubdate
-        pass
-    else:
+    pubdate = metadata.get("pubdate")
+    if pubdate:
+        date_components = pubdate[0].replace(' ', '').split("-")
         date_components = [int(v) for v in date_components]
         metadata["pubdate"] = datetime.date(*date_components)
 
-    html_content = render_template(template_name, metadata, jinja_env)
+    html_content = render_template(template_name, metadata, templates_env)
         
     with io.open(dest, "wt") as f:
         f.write(html_content)
@@ -65,14 +62,12 @@ def process_file(src, dest, template_name, jinja_env, md_converter):
     return metadata
 
 
-def convert_files_to_html(source_dir, dest_dir, template_name, templates_dir):
+def convert_files_to_html(source_dir, dest_dir, templates_env, template_name):
     """Converts markdown files in source dir to html files in dest dir
 
     Returns list of metadata extracted from each file"""
 
     converter = markdown.Markdown(extensions=['markdown.extensions.meta'])
-    jinja_env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(templates_dir))
 
     files = os.listdir(source_dir)
     markdown_files = [fname for fname in files 
@@ -85,7 +80,7 @@ def convert_files_to_html(source_dir, dest_dir, template_name, templates_dir):
         dest_file = os.path.join(dest_dir, fname.rsplit(".", 1)[0] + ".html")
 
         metadata = process_file(source_file, dest_file,
-                                template_name, jinja_env, converter)
+                                template_name, templates_env, converter)
         metadata_list.append(metadata)
         
     return metadata_list
@@ -119,35 +114,46 @@ def main():
             settings = json.loads(f.read())
             
         # create a new output directory
-        output_dir = settings["output_dirname"]
+        output_dir = settings["output_directory"]
         if os.path.exists(output_dir):
             shutil.rmtree(output_dir)
         os.mkdir(output_dir)
 
         # copy over static assets
-        shutil.copytree('static', output_dir + "/static")
+        shutil.copytree(settings["static_directory"], output_dir + "/static")
+
+        # Load templates
+        templates_dir = settings["templates_directory"]
+        templates_env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(templates_dir))
+        
+        templates_env.globals["blog_title"] = settings["blog_title"]
+        templates_env.globals["blog_description"] = settings["blog_description"]
+        templates_env.globals["blog_image"] = settings["blog_image"]
         
         # Generate entries
-        entry_metadata = convert_files_to_html("content/entries", 
-                                               output_dir, 
-                                               template_name="entry.html", 
-                                               templates_dir='templates')
+        entry_metadata = convert_files_to_html(settings["entries_directory"], 
+                                               output_dir,
+                                               templates_env,
+                                               template_name="entry.html")
 
         # Generate site pages
-        convert_files_to_html("content/pages", output_dir,
-                              template_name="page.html",
-                              templates_dir='templates')
+        convert_files_to_html(settings["pages_directory"], output_dir, 
+                              templates_env,
+                              template_name="page.html")
+                              
 
-        # Generate landing page
-        jinja_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader('templates'))
-
+        # Generate the landing page
         # sort entries in descending order of date
         entry_metadata.sort(key=lambda entry: entry["pubdate"], reverse=True)
         
-        context = {"entries": entry_metadata } 
+        context = {
+            "entries": entry_metadata, 
+            "blog_title": settings["blog_title"],
+            "blog_description": settings["blog_description"]
+        } 
         
-        html = render_template("index.html", context, jinja_env)
+        html = render_template("index.html", context, templates_env)
         dest = os.path.join(output_dir, "index.html")
         with io.open(dest, "wt") as f:
             f.write(html)
