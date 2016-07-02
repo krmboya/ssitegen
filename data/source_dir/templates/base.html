@@ -23,9 +23,11 @@
 
       <div class="content">
 	
-	<img src="{{ blog_image }}"
-	     id="blog-header-image"/>
-	
+	<div 
+	  id="blog-header-image"
+	  style="background-image: url({{ blog_image }});">
+	</div>
+
 	<hgroup class="">
 	  <h1 id="blog-title">{{ blog_title }}</h1>
 	  <h2 id="blog-description"> {{ blog_description }}</h2>

@@ -3,7 +3,6 @@ body { line-height: 1.8; }
 	   padding-right: 1em; padding-left: 1em; }
 #page-header { background-color: rgb(250, 250, 250); padding-top: 5%; 
 	       padding-bottom: 5%;}
-#blog-header-image { float: right; border-radius: 50px; max-width: 100px;}
 a { text-decoration: none; }
 .single-article { margin-top: 2em; margin-bottom: 2em;}
 #blog-navigation-list li { display: inline; font-size: smaller; }
@@ -14,3 +13,8 @@ a { text-decoration: none; }
 .single-article p { margin-bottom: 1em; }
 .tag { font-weight: bold; }
 .full-article-header { margin-bottom: 1em; }
+#blog-header-image {
+    float: right; width: 100px; height: 100px; min-heigth: 50px; min-width: 50px;
+    background-size: contain; -webkit-border-radius: 50px; -moz-border-radius: 50px;
+    border-radius: 50px;
+}
